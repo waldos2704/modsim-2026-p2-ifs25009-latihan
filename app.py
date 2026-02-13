@@ -26,6 +26,7 @@ def format_angka_otomatis(value):
             value = float(value.replace(".", "").replace(",", "."))
         except:
             return value
+
     
     try:
         v = abs(float(value))

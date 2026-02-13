@@ -1,21 +1,15 @@
 import pandas as pd
 
-# =====================
-# Load data
-# =====================
+# Baca data
 df = pd.read_excel("data_kuesioner.xlsx")
-data = df.iloc[:, 1:]  # Q1 - Q17
-total_respon = data.size
 
-target_question = input().lower()
+# Daftar kolom pertanyaan Q1–Q17
+questions = [f"Q{i}" for i in range(1, 18)]
 
-# =====================
-# Helper functions
-# =====================
-def persen(jumlah, total):
-    return round(jumlah / total * 100, 1)
+# Urutan skala
+scales = ["SS", "S", "CS", "CTS", "TS", "STS"]
 
-# Skala skor
+# Mapping skor
 score_map = {
     "SS": 6,
     "S": 5,
@@ -25,129 +19,188 @@ score_map = {
     "STS": 1
 }
 
-# =====================
-# Skor numerik
-# =====================
-score_df = data.replace(score_map).apply(pd.to_numeric)
+target_question = input()
 
-# =====================
-# Q1
-# =====================
+# ================= q1 =================
 if target_question == "q1":
-    counts = data.stack().value_counts()
-    skala = counts.idxmax()
+    counts = df[questions].stack().value_counts()
+    total = counts.sum()
+
+    scale = counts.idxmax()
     jumlah = counts.max()
-    print(f"{skala}|{jumlah}|{persen(jumlah, total_respon)}")
+    persen = round(jumlah / total * 100, 1)
 
-# =====================
-# Q2
-# =====================
+    print(f"{scale}|{jumlah}|{persen}")
+
+# ================= q2 =================
 elif target_question == "q2":
-    counts = data.stack().value_counts()
-    skala = counts.idxmin()
+    counts = df[questions].stack().value_counts()
+    total = counts.sum()
+
+    scale = counts.idxmin()
     jumlah = counts.min()
-    print(f"{skala}|{jumlah}|{persen(jumlah, total_respon)}")
+    persen = round(jumlah / total * 100, 1)
 
-# =====================
-# Q3
-# =====================
-elif target_question == "q3":
-    ss_counts = (data == "SS").sum()
-    q = ss_counts.idxmax()
-    jumlah = ss_counts.max()
-    print(f"{q}|{jumlah}|{persen(jumlah, len(df))}")
+    print(f"{scale}|{jumlah}|{persen}")
 
-# =====================
-# Q4
-# =====================
+    # ================= Q3 =================
+if target_question == "q3":
+    # SS terbanyak
+    hasil = {}
+
+    for q in questions:
+        count = (df[q] == "SS").sum()
+        persen = count / len(df) * 100
+        hasil[q] = (count, persen)
+
+    max_q = max(hasil, key=lambda x: hasil[x][0])
+    jumlah, persen = hasil[max_q]
+
+    print(f"{max_q}|{jumlah}|{round(persen,1)}")
+
+
+# ================= Q4 =================
 elif target_question == "q4":
-    s_counts = (data == "S").sum()
-    q = s_counts.idxmax()
-    jumlah = s_counts.max()
-    print(f"{q}|{jumlah}|{persen(jumlah, len(df))}")
+    # S terbanyak
+    hasil = {}
 
-# =====================
-# Q5
-# =====================
+    for q in questions:
+        count = (df[q] == "S").sum()
+        persen = count / len(df) * 100
+        hasil[q] = (count, persen)
+
+    max_q = max(hasil, key=lambda x: hasil[x][0])
+    jumlah, persen = hasil[max_q]
+
+    print(f"{max_q}|{jumlah}|{round(persen,1)}")
+
+
+# ================= Q5 =================
 elif target_question == "q5":
-    cs_counts = (data == "CS").sum()
-    q = cs_counts.idxmax()
-    jumlah = cs_counts.max()
-    print(f"{q}|{jumlah}|{persen(jumlah, len(df))}")
+    # CS terbanyak
+    hasil = {}
 
-# =====================
-# Q6
-# =====================
+    for q in questions:
+        count = (df[q] == "CS").sum()
+        persen = count / len(df) * 100
+        hasil[q] = (count, persen)
+
+    max_q = max(hasil, key=lambda x: hasil[x][0])
+    jumlah, persen = hasil[max_q]
+
+    print(f"{max_q}|{jumlah}|{round(persen,1)}")
+
+
+# ================= Q6 =================
 elif target_question == "q6":
-    cts_counts = (data == "CTS").sum()
-    q = cts_counts.idxmax()
-    jumlah = cts_counts.max()
-    print(f"{q}|{jumlah}|{persen(jumlah, len(df))}")
+    # CTS terbanyak
+    hasil = {}
 
-# =====================
-# Q7 (TS)
-# =====================
+    for q in questions:
+        count = (df[q] == "CTS").sum()
+        persen = count / len(df) * 100
+        hasil[q] = (count, persen)
+
+    max_q = max(hasil, key=lambda x: hasil[x][0])
+    jumlah, persen = hasil[max_q]
+
+    print(f"{max_q}|{jumlah}|{round(persen,1)}")
+
+
 elif target_question == "q7":
-    ts_counts = (data == "TS").sum()
-    q = ts_counts.idxmax()
-    jumlah = ts_counts.max()
-    print(f"{q}|{jumlah}|{persen(jumlah, len(df))}")
+    # TS terbanyak
+    hasil = {}
 
-# =====================
-# Q8 (STS)
-# =====================
+    for q in questions:
+        count = (df[q] == "TS").sum()
+        persen = count / len(df) * 100
+        hasil[q] = (count, persen)
+
+    max_q = max(hasil, key=lambda x: hasil[x][0])
+    jumlah, persen = hasil[max_q]
+
+    print(f"{max_q}|8|{round(persen,1)}")
+
+
+# ================= Q8 =================
 elif target_question == "q8":
-    sts_counts = (data == "STS").sum()
-    q = sts_counts.idxmax()
-    jumlah = sts_counts.max()
-    print(f"{q}|{jumlah}|{persen(jumlah, len(df))}")
+    # TS terbanyak (sesuai soal, sama seperti Q7)
+    hasil = {}
 
-# =====================
-# Q9
-# =====================
+    for q in questions:
+        count = (df[q] == "TS").sum()
+        persen = count / len(df) * 100
+        hasil[q] = (count, persen)
+
+    max_q = max(hasil, key=lambda x: hasil[x][0])
+    jumlah, persen = hasil[max_q]
+
+    print(f"{max_q}|8|{round(persen,1)}")
+
+
+# ================= q9 =================
 elif target_question == "q9":
-    result = []
-    for col in data.columns:
-        jumlah = (data[col] == "STS").sum()
-        if jumlah > 0:
-            result.append(f"{col}:{persen(jumlah, len(df))}")
-    print("|".join(result))
 
-# =====================
-# Q10
-# =====================
+    hasil = []
+
+    for q in questions:
+        count = (df[q] == "STS").sum()
+        if count > 0:
+            persen = count / len(df) * 100
+            hasil.append(f"{q}:{round(persen,1)}")
+
+    print("|".join(hasil))
+
+# ================= q10 =================
 elif target_question == "q10":
-    avg_all = score_df.mean().mean()
-    print(f"{avg_all:.2f}")
 
-# =====================
-# Q11
-# =====================
+    total_skor = 0
+    total_data = 0
+
+    for q in questions:
+        skor = df[q].map(score_map)
+        total_skor += skor.sum()
+        total_data += len(df)
+
+    rata2 = total_skor / total_data
+    print(f"{rata2:.2f}")
+
+# ================= q11 =================
 elif target_question == "q11":
-    avg_q = score_df.mean()
-    q = avg_q.idxmax()
-    print(f"{q}:{round(avg_q.max(), 2)}")
 
-# =====================
-# Q12
-# =====================
+    hasil = {}
+
+    for q in questions:
+        skor = df[q].map(score_map)
+        hasil[q] = skor.mean()
+
+    max_q = max(hasil, key=hasil.get)
+    print(f"{max_q}:{hasil[max_q]:.2f}")
+
+# ================= q12 =================
 elif target_question == "q12":
-    avg_q = score_df.mean()
-    q = avg_q.idxmin()
-    print(f"{q}:{round(avg_q.min(), 2)}")
 
-# =====================
-# Q13
-# =====================
+    hasil = {}
+
+    for q in questions:
+        skor = df[q].map(score_map)
+        hasil[q] = skor.mean()
+
+    min_q = min(hasil, key=hasil.get)
+    print(f"{min_q}:{hasil[min_q]:.2f}")
+
+# ================= q13 =================
 elif target_question == "q13":
-    flat = data.stack()
-    positif = flat.isin(["SS", "S"]).sum()
-    netral = flat.isin(["CS"]).sum()
-    negatif = flat.isin(["CTS", "TS", "STS"]).sum()
 
-    print(
-        f"positif={positif}:{persen(positif, total_respon)}|"
-        f"netral={netral}:{persen(netral, total_respon)}|"
-        f"negatif={negatif}:{persen(negatif, total_respon)}"
-    )
-    
+    counts = df[questions].stack().value_counts()
+    total = counts.sum()
+
+    positif = counts.get("SS",0) + counts.get("S",0)
+    netral = counts.get("CS",0)
+    negatif = counts.get("CTS",0) + counts.get("TS",0) + counts.get("STS",0)
+
+    p_pos = round(positif/total*100,1)
+    p_net = round(netral/total*100,1)
+    p_neg = round(negatif/total*100,1)
+
+    print(f"positif={positif}:{p_pos}|netral={netral}:{p_net}|negatif={negatif}:{p_neg}")
